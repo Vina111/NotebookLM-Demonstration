@@ -687,19 +687,20 @@
     <div class="case-step">
       <div class="case-step-num">3</div>
       <div class="case-step-body">
-        <div class="step-title">用一个 Prompt 让 NotebookLM 搜集所有竞品 Source</div>
-        <div class="step-detail">一次性 brief 竞品调研范围，让它用 Fast Research 找竞品的新闻稿、官方 Blog、媒体采访等内容，手动审核后选择纳入分析的 Source：</div>
+        <div class="step-title"> 补充 Source：输入 Prompt 让 NotebookLM 搜集竞品信息</div>
+        <div class="step-detail">回到左边的“Add Source”板块，通过文字 brief 描述竞品调研范围，让它用 Fast Research 找竞品的新闻稿、官方 Blog、媒体采访等内容，手动审核后选择囊括进分析的 Source：</div>
         <div class="prompt-box" style="margin-top: 12px;">
           <button class="copy-btn" onclick="copyText(this, 'cs3')">复制</button>
           <pre id="cs3">Now I want to map EverMind's competitive landscape. Please search for companies that offer similar AI memory, long-term context, or persistent knowledge layer solutions. For each competitor, find: their official product/feature pages, any press releases or funding announcements, founder or team interviews, and independent analyst or media coverage. I will review each source manually before adding.</pre>
         </div>
+      <div class="tip" style="margin-top: 12px;">💡Tips: 在对话时，可以随时通过勾选/不勾选左边栏的信息来源，来控制对话时Notebook的知识来源。</div>
       </div>
     </div>
 
     <div class="case-step">
       <div class="case-step-num">4</div>
       <div class="case-step-body">
-        <div class="step-title">清除 Chat 记忆，重新开始竞对分析</div>
+        <div class="step-title">【可选】清除 Chat 记忆，重新开始竞对分析</div>
         <div class="step-detail">
           完成 Source 筛选后，<strong>清除当前对话历史</strong>（避免前期问答影响竞对分析的逻辑），以一个新的视角开始横向对比提问：
         </div>
@@ -711,11 +712,11 @@
           </div>
           <div style="background: var(--code-bg); border-radius: 8px; padding: 12px 16px; position: relative;">
             <button class="copy-btn" onclick="copyText(this, 'cs4b')">复制</button>
-            <div style="font-size: 11px; color: var(--ink-3); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.06em;">EverMind 的差异化空间</div>
+            <div style="font-size: 11px; color: var(--ink-3); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.06em;">EverMind 的竞争优势与市场定位</div>
             <pre id="cs4b" style="font-size: 12.5px; color: var(--ink-2); white-space: pre-wrap; font-family: 'SF Mono', monospace;">Based on the competitive landscape, what are EverMind's clearest points of differentiation? Are there positioning gaps in the market that EverMind is uniquely placed to occupy? What narratives are competitors using that EverMind has not claimed?</pre>
           </div>
         </div>
-        <div class="tip" style="margin-top: 12px;">分析结束后，同样将有价值的回答保存为 Note，方便后续 Studio 输出时直接调用。</div>
+        <div class="tip" style="margin-top: 12px;">💡Tips:分析结束后，同样将有价值的回答保存为 Note，方便后续 Studio 输出时直接调用。</div>
       </div>
     </div>
 

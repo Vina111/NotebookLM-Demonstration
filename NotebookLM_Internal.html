@@ -854,6 +854,11 @@ Here are my two inputs:
 PURPOSE: [例：Competitive analysis of how leading energy storage brands position themselves in international media]
 AUDIENCE: [例：PR strategy team at a Chinese clean energy company targeting European markets]</pre>
       </div>
+       <div style="font-size: 13px; color: var(--ink-3); margin-bottom: 14px;">例：通过将EverMind项目报告需求的 Purpose 和 Audience 输入Gemini中，获取到以下指令：</div>
+        <div class="prompt-box" style="margin: 0 0 12px 0;">
+        <button class="copy-btn" onclick="copyText(this, 'p6a')">复制</button>
+        <pre id="p6a">Create a comprehensive market briefing that explains the AI memory landscape by highlighting the specific competitive advantages and key use cases of major industry players. Focus on identifying the technical "moats" of each company and how their products specifically enable AI scaling, ensuring the report translates complex hardware specifications into clear strategic narratives. Write in an accessible, professional style that provides tech journalists with both the foundational context and the "why it matters" behind current memory trends.</pre>
+      </div>
     </div>
 
     <!-- Slide Prompt -->
@@ -959,14 +964,45 @@ AUDIENCE: [例：PR strategy team at a Chinese clean energy company targeting Eu
 <script>
 function copyText(btn, id) {
   const el = document.getElementById(id);
-  navigator.clipboard.writeText(el.textContent.trim()).then(() => {
-    btn.textContent = '已复制 ✓';
-    btn.classList.add('copied');
-    setTimeout(() => {
-      btn.textContent = '复制';
-      btn.classList.remove('copied');
-    }, 2000);
-  });
+  const text = el.textContent.trim();
+
+  // 优先用 Clipboard API
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(() => {
+      markCopied(btn);
+    }).catch(() => {
+      fallbackCopy(text, btn);
+    });
+  } else {
+    fallbackCopy(text, btn);
+  }
+}
+
+function fallbackCopy(text, btn) {
+  const textarea = document.createElement('textarea');
+  textarea.value = text;
+  textarea.style.cssText = 'position:fixed;top:-9999px;left:-9999px;opacity:0;';
+  document.body.appendChild(textarea);
+  textarea.focus();
+  textarea.select();
+  try {
+    document.execCommand('copy');
+    markCopied(btn);
+  } catch (e) {
+    btn.textContent = '复制失败';
+    setTimeout(() => { btn.textContent = '复制'; }, 2000);
+  }
+  document.body.removeChild(textarea);
+}
+
+function markCopied(btn) {
+  const original = btn.textContent;
+  btn.textContent = '已复制 ✓';
+  btn.classList.add('copied');
+  setTimeout(() => {
+    btn.textContent = original;
+    btn.classList.remove('copied');
+  }, 2000);
 }
 </script>
 </body>

@@ -983,54 +983,57 @@ AUDIENCE: [例：PR strategy team at a Chinese clean energy company targeting Eu
 </div>
 
 <script>
+// ── Copy function ──────────────────────────────────────────
 function copyText(btn, id) {
   const el = document.getElementById(id);
   const text = el.textContent.trim();
-
-  // 优先用 Clipboard API
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(text).then(() => {
       markCopied(btn);
-    }).catch(() => {
-      fallbackCopy(text, btn);
-    });
+    }).catch(() => fallbackCopy(text, btn));
   } else {
     fallbackCopy(text, btn);
   }
 }
-
 function fallbackCopy(text, btn) {
-  const textarea = document.createElement('textarea');
-  textarea.value = text;
-  textarea.style.cssText = 'position:fixed;top:-9999px;left:-9999px;opacity:0;';
-  document.body.appendChild(textarea);
-  textarea.focus();
-  textarea.select();
-  try {
-    document.execCommand('copy');
-    markCopied(btn);
-  } catch (e) {
-    btn.textContent = '复制失败';
-    setTimeout(() => { btn.textContent = '复制'; }, 2000);
-  }
-  document.body.removeChild(textarea);
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.cssText = 'position:fixed;top:-9999px;left:-9999px;opacity:0;';
+  document.body.appendChild(ta);
+  ta.focus(); ta.select();
+  try { document.execCommand('copy'); markCopied(btn); }
+  catch(e) { btn.textContent = '复制失败'; setTimeout(() => { btn.textContent = '复制'; }, 2000); }
+  document.body.removeChild(ta);
 }
-
 function markCopied(btn) {
   const original = btn.textContent;
   btn.textContent = '已复制 ✓';
   btn.classList.add('copied');
-  setTimeout(() => {
-    btn.textContent = original;
-    btn.classList.remove('copied');
-  }, 2000);
+  setTimeout(() => { btn.textContent = original; btn.classList.remove('copied'); }, 2000);
 }
-</script>
- // 高亮当前 section 对应的导航标签
-const sections = document.querySelectorAll('.section');
-const navLinks = document.querySelectorAll('.nav a');
 
-// 点击时立即高亮
+// ── Nav highlight on scroll ────────────────────────────────
+const navLinks = document.querySelectorAll('.nav a');
+const sections = Array.from(document.querySelectorAll('.section[id]'));
+
+function updateActiveNav() {
+  // 找到当前离视口顶部最近（且已进入视口）的 section
+  let current = sections[0];
+  for (const section of sections) {
+    const top = section.getBoundingClientRect().top;
+    if (top <= 120) {          // 120px = nav 高度 + 一点缓冲
+      current = section;
+    }
+  }
+  navLinks.forEach(link => {
+    link.classList.remove('active');
+    if (link.getAttribute('href') === '#' + current.id) {
+      link.classList.add('active');
+    }
+  });
+}
+
+// 点击立即高亮
 navLinks.forEach(link => {
   link.addEventListener('click', () => {
     navLinks.forEach(l => l.classList.remove('active'));
@@ -1038,24 +1041,11 @@ navLinks.forEach(link => {
   });
 });
 
-// 滚动时根据当前可见 section 自动高亮
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      const id = entry.target.getAttribute('id');
-      navLinks.forEach(link => {
-        link.classList.remove('active');
-        if (link.getAttribute('href') === `#${id}`) {
-          link.classList.add('active');
-        }
-      });
-    }
-  });
-}, {
-  rootMargin: '-30% 0px -60% 0px', // 进入视口上方 30% 时触发
-  threshold: 0
-});
+// 滚动时更新
+window.addEventListener('scroll', updateActiveNav, { passive: true });
 
-sections.forEach(section => observer.observe(section));
+// 页面加载时初始化
+updateActiveNav();
+</script>
 </body>
 </html>
